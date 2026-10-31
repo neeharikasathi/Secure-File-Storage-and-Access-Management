@@ -22,42 +22,6 @@ This project demonstrates the implementation of enterprise-grade access control,
 
 ---
 
-## 🌐 Logical Architecture & Workflow
-
-```text
-  ┌─────────────────────────────────────────────────────────────┐
-  │                   Shared Directory Space                    │
-  │                      /home/project                          │
-  │     (Permissions: 770 + Sticky Bit, Owner Group: projb)     │
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-         ┌───────────────────────┴───────────────────────┐
-         ▼                                               ▼
-┌──────────────────┐                            ┌──────────────────┐
-│  Project A Team  │                            │  Project B Team  │
-│ (pa1, pa2...pa5) │                            │  (pb1, pb2, pb3) │
-│ Inherits custom  │                            │ Inherits group   │
-│ User-level ACLs  │                            │ folder ownership │
-└────────┬─────────┘                            └────────┬─────────┘
-         │                                               │
-         └───────────────┬───────────────────────────────┘
-                         │ (System Activity logs generated)
-                         ▼
-┌──────────────────────────────────────────────────────────────────┐
-│ Linux Audit Daemon (auditd)                                      │
-│  └─ Active Rule: -w /home/project -p rwxa -k project_access      │
-└────────────────────────┬─────────────────────────────────────────┘
-                         │ (Cron automation pulls logs every 5 mins)
-                         ▼
-┌──────────────────────────────────────────────────────────────────┐
-│ Apache2 Web Server Reporting Portal                              │
-│  ├─ Target File: /var/www/html/auditlog.txt                      │
-│  └─ Security: Protected via Basic HTTP Auth (.htaccess)          │
-└──────────────────────────────────────────────────────────────────┘
-```
-
----
-
 ## 🚀 Step-by-Step Implementation
 
 ### Phase 1: Identity and Access Management Configuration
